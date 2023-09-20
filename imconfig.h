@@ -74,7 +74,7 @@
 //---- Use FreeType to build and rasterize the font atlas (instead of stb_truetype which is embedded by default in Dear ImGui)
 // Requires FreeType headers to be available in the include path. Requires program to be compiled with 'misc/freetype/imgui_freetype.cpp' (in this repository) + the FreeType library (not provided).
 // On Windows you may use vcpkg with 'vcpkg install freetype --triplet=x64-windows' + 'vcpkg integrate install'.
-//#define IMGUI_ENABLE_FREETYPE
+#define IMGUI_ENABLE_FREETYPE
 
 //---- Use FreeType+lunasvg library to render OpenType SVG fonts (SVGinOT)
 // Requires lunasvg headers to be available in the include path + program to be linked with the lunasvg library (not provided).
@@ -88,15 +88,17 @@
 
 //---- Define constructor and implicit cast operators to convert back<>forth between your math types and ImVec2/ImVec4.
 // This will be inlined as part of ImVec2 and ImVec4 class declarations.
-/*
-#define IM_VEC2_CLASS_EXTRA                                                     \
-        constexpr ImVec2(const MyVec2& f) : x(f.x), y(f.y) {}                   \
-        operator MyVec2() const { return MyVec2(x,y); }
 
-#define IM_VEC4_CLASS_EXTRA                                                     \
-        constexpr ImVec4(const MyVec4& f) : x(f.x), y(f.y), z(f.z), w(f.w) {}   \
-        operator MyVec4() const { return MyVec4(x,y,z,w); }
-*/
+#include <linalg.h>
+
+#define IM_VEC2_CLASS_EXTRA                                                 \
+        ImVec2(const linalg::vec<float, 2>& f) { x = f.x; y = f.y; }                       \
+        operator linalg::vec<float, 2>() const { return linalg::vec<float, 2>(x,y); }
+
+#define IM_VEC4_CLASS_EXTRA                                                 \
+        ImVec4(const linalg::vec<float, 4>& f) { x = f.x; y = f.y; z = f.z; w = f.w; }     \
+        operator linalg::vec<float, 4>() const { return linalg::vec<float, 4>(x,y,z,w); }
+
 //---- ...Or use Dear ImGui's own very basic math operators.
 //#define IMGUI_DEFINE_MATH_OPERATORS
 
