@@ -5953,7 +5953,7 @@ static ImVec2 CalcWindowSizeAfterConstraint(ImGuiWindow* window, const ImVec2& s
     {
         ImGuiWindow* window_for_height = GetWindowForTitleAndMenuHeight(window);
         new_size = ImMax(new_size, g.Style.WindowMinSize);
-        const float minimum_height = window_for_height->TitleBarHeight() + window_for_height->MenuBarHeight() + ImMax(0.0f, g.Style.WindowRounding - 1.0f);
+        const float minimum_height = window_for_height->TitleBarHeight() + window_for_height->MenuBarHeight() + window_for_height->StatusBarHeight() + ImMax(0.0f, g.Style.WindowRounding - 1.0f);
         new_size.y = ImMax(new_size.y, minimum_height); // Reduce artifacts with very small windows
     }
     return new_size;
@@ -6430,6 +6430,16 @@ void ImGui::RenderWindowDecorations(ImGuiWindow* window, const ImRect& title_bar
             Scrollbar(ImGuiAxis_X);
         if (window->ScrollbarY)
             Scrollbar(ImGuiAxis_Y);
+		
+		// Status bar
+        if (flags & ImGuiWindowFlags_StatusBar)
+        {
+            ImRect status_bar_rect = window->StatusBarRect();
+            status_bar_rect.ClipWith(window->Rect());
+            window->DrawList->AddRectFilled(status_bar_rect.Min + ImVec2(window_border_size, 0), status_bar_rect.Max - ImVec2(window_border_size, 0), GetColorU32(ImGuiCol_MenuBarBg), 0.0f, ImDrawCornerFlags_Top);
+            if (style.FrameBorderSize > 0.0f)
+                window->DrawList->AddLine(status_bar_rect.GetTL(), status_bar_rect.GetTR(), GetColorU32(ImGuiCol_Border), style.FrameBorderSize);
+        }
 
         // Render resize grips (after their input handling so we don't have a frame of latency)
         if (handle_borders_and_resize_grips && !(flags & ImGuiWindowFlags_NoResize))
@@ -6917,7 +6927,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
         const ImVec2 scrollbar_sizes_from_last_frame = window->ScrollbarSizes;
         window->DecoOuterSizeX1 = 0.0f;
         window->DecoOuterSizeX2 = 0.0f;
-        window->DecoOuterSizeY1 = window->TitleBarHeight() + window->MenuBarHeight();
+        window->DecoOuterSizeY1 = window->TitleBarHeight() + window->MenuBarHeight() + window->StatusBarHeight();
         window->DecoOuterSizeY2 = 0.0f;
         window->ScrollbarSizes = ImVec2(0.0f, 0.0f);
 

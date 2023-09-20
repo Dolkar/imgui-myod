@@ -2728,6 +2728,8 @@ public:
     ImRect      TitleBarRect() const    { return ImRect(Pos, ImVec2(Pos.x + SizeFull.x, Pos.y + TitleBarHeight())); }
     float       MenuBarHeight() const   { ImGuiContext& g = *Ctx; return (Flags & ImGuiWindowFlags_MenuBar) ? DC.MenuBarOffset.y + CalcFontSize() + g.Style.FramePadding.y * 2.0f : 0.0f; }
     ImRect      MenuBarRect() const     { float y1 = Pos.y + TitleBarHeight(); return ImRect(Pos.x, y1, Pos.x + SizeFull.x, y1 + MenuBarHeight()); }
+    float       StatusBarHeight() const { ImGuiContext& g = *Ctx; return (Flags & ImGuiWindowFlags_StatusBar) ? CalcFontSize() + g.Style.FramePadding.y * 2.0f : 0.0f; }
+    ImRect      StatusBarRect() const   { float y2 = Pos.y + Size.y; return ImRect(Pos.x, y2 - StatusBarHeight(), Pos.x + SizeFull.x, y2); }
 };
 
 //-----------------------------------------------------------------------------
