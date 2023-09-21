@@ -6436,7 +6436,7 @@ void ImGui::RenderWindowDecorations(ImGuiWindow* window, const ImRect& title_bar
         {
             ImRect status_bar_rect = window->StatusBarRect();
             status_bar_rect.ClipWith(window->Rect());
-            window->DrawList->AddRectFilled(status_bar_rect.Min + ImVec2(window_border_size, 0), status_bar_rect.Max - ImVec2(window_border_size, 0), GetColorU32(ImGuiCol_MenuBarBg), 0.0f, ImDrawCornerFlags_Top);
+            window->DrawList->AddRectFilled(status_bar_rect.Min + ImVec2(window_border_size, 0), status_bar_rect.Max - ImVec2(window_border_size, 0), GetColorU32(ImGuiCol_MenuBarBg), 0.0f, ImDrawFlags_RoundCornersTop);
             if (style.FrameBorderSize > 0.0f)
                 window->DrawList->AddLine(status_bar_rect.GetTL(), status_bar_rect.GetTR(), GetColorU32(ImGuiCol_Border), style.FrameBorderSize);
         }
